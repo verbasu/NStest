@@ -27,17 +27,15 @@ type Ttype struct {
 
 func main() {
 	taskCreaturer := func(a chan Ttype) {
-		go func() {
-			for {
-				tn := time.Now()
-				ft := []byte("good task")
-				if tn.Nanosecond()%2 > 0 { // вот такое условие появления ошибочных тасков
-					ft = []byte("bad task")
-				}
-				time.Sleep(time.Millisecond * 150)
-				a <- Ttype{payLoad: ft, cT: tn.Format(time.RFC3339Nano), id: guid.New()} // передаем таск на выполнение
+		for {
+			tn := time.Now()
+			ft := []byte("good task")
+			if tn.Nanosecond()%2 > 0 { // вот такое условие появления ошибочных тасков
+				ft = []byte("bad task")
 			}
-		}()
+			time.Sleep(time.Millisecond * 150)
+			a <- Ttype{payLoad: ft, cT: tn.Format(time.RFC3339Nano), id: guid.New()} // передаем таск на выполнение
+		}
 	}
 
 	superChan := make(chan Ttype, 10)
